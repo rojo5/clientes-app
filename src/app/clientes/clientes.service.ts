@@ -10,28 +10,38 @@ import { map } from 'rxjs/operators';
 })
 export class ClientesService {
 
-  private endPoint: string = 'http://localhost:8080/api/clientes';
+  private endPoint = 'http://localhost:8081/api/clientes';
 
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) { }
 
   getClientes(): Observable<Cliente[]> {
-    
-    // Primera forma
-    //return this.http.get<Cliente[]>(this.endPoint);
 
-    //Segunda forma
+    // Primera forma
+    // return this.http.get<Cliente[]>(this.endPoint);
+
+    // Segunda forma
     return this.http.get(this.endPoint).pipe(
       map((response) => response as Cliente[])
     );
   }
 
-  create(cliente: Cliente):  Observable<Cliente>{
-     return this.http.post<Cliente>(this.endPoint, cliente,{headers: this.httpHeaders})
+  create(cliente: Cliente): Observable<Cliente> {
+     return this.http.post<Cliente>(this.endPoint, cliente, {headers: this.httpHeaders});
   }
 
-  getCliente(id): Observable<Cliente>{
-    return this.http.get<Cliente>(`${this.endPoint}/${id}`)
+  getCliente(id): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.endPoint}/${id}`);
   }
+
+
+  update(cliente: Cliente): Observable<Cliente> {
+    return this.http.put<Cliente>(`${this.endPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders});
+  }
+
+  delete(id: number): Observable<Cliente> {
+    return this.http.delete<Cliente>(`${this.endPoint}/${id}`, {headers: this.httpHeaders});
+  }
+
 }
